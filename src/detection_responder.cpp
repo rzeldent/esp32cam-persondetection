@@ -23,4 +23,6 @@ void RespondToDetection(tflite::ErrorReporter *error_reporter, uint8_t person_sc
 {
     error_reporter->Report("Person score:%d No person score:%d", person_score, no_person_score);
     digitalWrite(LED_BUILTIN, person_score > no_person_score);
+    delay(250);
+    digitalWrite(LED_BUILTIN, false);
 }

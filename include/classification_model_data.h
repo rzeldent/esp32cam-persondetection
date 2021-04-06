@@ -20,5 +20,5 @@ limitations under the License.
 
 #pragma once
 
-extern const unsigned char g_person_detect_model_data[];
-extern const int g_person_detect_model_data_len;
+extern const unsigned char g_classification_model_data[];
+extern const int g_classification_model_data_len;

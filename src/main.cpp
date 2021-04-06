@@ -16,6 +16,8 @@
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
 
+#include "soc/rtc_cntl_reg.h"
+
 // Globals, used for compatibility with Arduino-style sketches.
 namespace
 {
@@ -32,7 +34,22 @@ namespace
 void setup()
 {
   // put your setup code here, to run once:
+
+  //setCpuFrequencyMhz(240);
+
+  // Disable brownout
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+
+  Serial.begin(115200);
+  Serial.setDebugOutput(true);
+  esp_log_level_set("*", ESP_LOG_VERBOSE);
+
+  log_i("CPU Freq = %d Mhz", getCpuFrequencyMhz());
+
+  log_i("Starting ESP32Cam...");
+
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, false);
 
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
@@ -42,7 +59,7 @@ void setup()
 
   // Map the model into a usable data structure. This doesn't involve any
   // copying or parsing, it's a very lightweight operation.
-  model = tflite::GetModel(g_person_detect_model_data);
+  model = tflite::GetModel(g_classification_model_data);
   if (model->version() != TFLITE_SCHEMA_VERSION)
   {
     error_reporter->Report("Model provided is schema version %d not equal to supported version %d.", model->version(), TFLITE_SCHEMA_VERSION);

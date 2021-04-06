@@ -1,4 +1,3 @@
-
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +39,7 @@ static const char *TAG = "app_camera";
 // Get the camera module ready
 TfLiteStatus InitCamera(tflite::ErrorReporter *error_reporter)
 {
-  auto ret = app_camera_init();
+  int ret = app_camera_init();
   if (ret != 0)
   {
     TF_LITE_REPORT_ERROR(error_reporter, "Camera init failed\n");
@@ -101,13 +100,29 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, uint8_t *imag
   {
     int pos = 0;
     memset(str, 0, sizeof(str));
-    for (int x = 0; x < IMAGE_WIDTH; x += 2)
+    for (int x = 0; x < IMAGE_WIDTH; x += 1)
     {
       int getPos = y * IMAGE_HEIGHT + x;
       int color = image_data[getPos];
-      //static const char intensity[] = {' ', ':', ',', ':', ';', 'o', 'x', '%', '#', '@'};
-      static const char intensity[] = {' ', '-', '+', '=', '*', 'H', '#', 'M'};
-      str[pos++] = intensity[(255 - color) * sizeof(intensity) / 256];
+
+      if (color > 224)
+        str[pos] = ' ';
+      else if (color > 192)
+        str[pos] = '-';
+      else if (color > 160)
+        str[pos] = '+';
+      else if (color > 128)
+        str[pos] = '=';
+      else if (color > 96)
+        str[pos] = '*';
+      else if (color > 64)
+        str[pos] = 'H';
+      else if (color > 32)
+        str[pos] = '#';
+      else
+        str[pos] = 'M';
+
+      pos++;
     }
 
     TF_LITE_REPORT_ERROR(error_reporter, str);

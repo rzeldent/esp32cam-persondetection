@@ -59,7 +59,7 @@ int app_camera_init()
   config.fb_count = 1;
 
   // camera init
-  auto err = esp_camera_init(&config);
+  int err = esp_camera_init(&config);
   if (err != ESP_OK)
   {
     ESP_LOGE(TAG, "Camera init failed with error 0x%x", err);

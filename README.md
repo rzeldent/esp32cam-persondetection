@@ -1,1 +1,1 @@
-# esp32-cam-etd
+# esp32cam-persondetection

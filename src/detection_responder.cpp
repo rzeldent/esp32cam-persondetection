@@ -21,8 +21,8 @@ limitations under the License.
 // should implement their own versions of this function.
 void RespondToDetection(tflite::ErrorReporter *error_reporter, uint8_t person_score, uint8_t no_person_score)
 {
-    error_reporter->Report("Person score:%d No person score:%d", person_score, no_person_score);
-    digitalWrite(LED_BUILTIN, person_score > no_person_score);
-    delay(250);
-    digitalWrite(LED_BUILTIN, false);
+    error_reporter->Report("Person score:%3d No person score:%3d: %s", person_score, no_person_score, person_score > no_person_score ? "Person detected" : "Nobody detected");
+//    digitalWrite(LED_BUILTIN, person_score > no_person_score);
+//    delay(250);
+//    digitalWrite(LED_BUILTIN, false);
 }

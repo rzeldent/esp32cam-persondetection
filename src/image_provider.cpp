@@ -62,7 +62,7 @@ extern "C" int capture_image()
   return 0;
 }
 // Begin the capture and wait for it to finish
-TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, uint8_t *image_data)
+TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, int image_width, int image_height, int channels, uint8_t *image_data)
 {
   /* 2. Get one image with camera */
   int ret = capture_image();
@@ -71,7 +71,7 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, uint8_t *imag
     return kTfLiteError;
   }
 
-  if (fb->width == IMAGE_WIDTH && fb->height == IMAGE_HEIGHT)
+  if (fb->width == image_width && fb->height == image_height)
   {
     memcpy(image_data, fb->buf, fb->len);
   }
@@ -79,11 +79,11 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, uint8_t *imag
   {
     // Trimming Image
     int post = 0;
-    int startx = (fb->width - IMAGE_WIDTH) / 2;
-    int starty = (fb->height - IMAGE_HEIGHT) / 2;
-    for (int y = 0; y < IMAGE_HEIGHT; y++)
+    int startx = (fb->width - image_width) / 2;
+    int starty = (fb->height - image_height) / 2;
+    for (int y = 0; y < image_height; y++)
     {
-      for (int x = 0; x < IMAGE_WIDTH; x++)
+      for (int x = 0; x < image_width; x++)
       {
         int getPos = (starty + y) * fb->width + startx + x;
         image_data[post] = fb->buf[getPos];
@@ -95,14 +95,14 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, uint8_t *imag
 
   // Debug Out
   TF_LITE_REPORT_ERROR(error_reporter, "");
-  char str[IMAGE_WIDTH + 1];
-  for (int y = 0; y < IMAGE_HEIGHT; y += 4)
+  char str[image_width + 1];
+  for (int y = 0; y < image_height; y += 4)
   {
     int pos = 0;
     memset(str, 0, sizeof(str));
-    for (int x = 0; x < IMAGE_WIDTH; x += 1)
+    for (int x = 0; x < image_width; x += 1)
     {
-      int getPos = y * IMAGE_HEIGHT + x;
+      int getPos = y * image_height + x;
       int color = image_data[getPos];
 
       if (color > 224)
@@ -148,7 +148,7 @@ TfLiteStatus GetImage(tflite::ErrorReporter *error_reporter, int image_width, in
     g_is_camera_initialized = true;
   }
   /* Camera Captures Image of size 96 x 96  which is of the format grayscale thus, no need to crop or process further, directly send it to tf */
-  TfLiteStatus capture_status = PerformCapture(error_reporter, image_data);
+  TfLiteStatus capture_status = PerformCapture(error_reporter, image_width, image_height, channels, image_data);
   if (capture_status != kTfLiteOk)
   {
     TF_LITE_REPORT_ERROR(error_reporter, "PerformCapture failed\n");

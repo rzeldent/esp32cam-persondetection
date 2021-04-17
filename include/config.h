@@ -1,8 +1,5 @@
 #pragma once
 
-#define IMAGE_WIDTH 96
-#define IMAGE_HEIGHT 96
-
 // VFlip
 //#define CONFIG_CAMERA_VFLIP 1
 

@@ -35,8 +35,6 @@ void setup()
 {
   // put your setup code here, to run once:
 
-  //setCpuFrequencyMhz(240);
-
   // Disable brownout
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
 
@@ -45,7 +43,6 @@ void setup()
   esp_log_level_set("*", ESP_LOG_VERBOSE);
 
   log_i("CPU Freq = %d Mhz", getCpuFrequencyMhz());
-
   log_i("Starting ESP32Cam...");
 
   pinMode(LED_BUILTIN, OUTPUT);

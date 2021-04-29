@@ -93,7 +93,6 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, int image_wid
   }
   esp_camera_fb_return(fb);
 
-  /*
   // Debug Out
   TF_LITE_REPORT_ERROR(error_reporter, "");
   char str[image_width + 1];
@@ -128,7 +127,6 @@ TfLiteStatus PerformCapture(tflite::ErrorReporter *error_reporter, int image_wid
 
     TF_LITE_REPORT_ERROR(error_reporter, str);
   }
-*/
 
   /* here the esp camera can give you grayscale image directly */
   return kTfLiteOk;

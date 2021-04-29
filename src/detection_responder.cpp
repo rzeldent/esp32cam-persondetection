@@ -22,8 +22,8 @@ limitations under the License.
 void RespondToDetection(tflite::ErrorReporter *error_reporter, uint8_t person_score, uint8_t no_person_score)
 {
 
-    error_reporter->Report("Person score:%3d No person score:%3d", person_score, no_person_score);
-    if (person_score > 0.8 * 256)
+    error_reporter->Report("Person score:%d No person score:%d", person_score, no_person_score);
+    if (person_score > no_person_score)
     {
         digitalWrite(LED_BUILTIN, person_score > no_person_score);
         delay(100);
